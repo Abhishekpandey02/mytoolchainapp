@@ -12,7 +12,12 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
-
+    
+    - name: Debug Secrets
+      run: |
+          echo "USER=${{ secrets.EC2_USER }}"
+          echo "HOST1=${{ secrets.EC2_HOST_1 }}"
+          echo "HOST2=${{ secrets.EC2_HOST_2 }}"
     - name: Setup SSH key
       run: |
         mkdir -p ~/.ssh
