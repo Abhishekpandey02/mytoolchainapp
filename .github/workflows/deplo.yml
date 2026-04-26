@@ -28,7 +28,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST_1 }} << 'EOF'
           set -e
-          cd /home/ubuntu/your-app
+          cd /home/ubuntu/mytoolchainapp
 
           # Update code safely
           git fetch --all
@@ -43,7 +43,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST_2 }} << 'EOF'
           set -e
-          cd /home/ubuntu/your-app
+          cd /home/ubuntu/mytoolchainapp
 
           # Update code safely
           git fetch --all
