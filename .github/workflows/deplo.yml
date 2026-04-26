@@ -3,7 +3,7 @@ name: Deploy to Multiple EC2
 on:
   push:
     branches:
-      - main   # change to master only if your repo uses master
+      - main   # change to master if your repo uses master
 
 jobs:
   deploy:
@@ -19,36 +19,32 @@ jobs:
         echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
 
-    # (Optional but good) add known_hosts to avoid prompts
-    - name: Add hosts to known_hosts
-      run: |
-        ssh-keyscan -H ${{ secrets.EC2_HOST_1 }} >> ~/.ssh/known_hosts
-        ssh-keyscan -H ${{ secrets.EC2_HOST_2 }} >> ~/.ssh/known_hosts
-
     - name: Deploy to EC2-1
       run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST_1 }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST_1 }} << 'EOF'
           set -e
           cd /home/ubuntu/your-app
 
-          # ensure repo is clean and up-to-date
+          # Update code safely
           git fetch --all
-          git reset --hard origin/main   # change to origin/master if using master
+          git reset --hard origin/main
 
-          # rebuild & restart
+          # Restart containers
           docker-compose down
           docker-compose up --build -d
         EOF
 
     - name: Deploy to EC2-2
       run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST_2 }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST_2 }} << 'EOF'
           set -e
           cd /home/ubuntu/your-app
 
+          # Update code safely
           git fetch --all
-          git reset --hard origin/main   # change to origin/master if using master
+          git reset --hard origin/main
 
+          # Restart containers
           docker-compose down
           docker-compose up --build -d
         EOF
