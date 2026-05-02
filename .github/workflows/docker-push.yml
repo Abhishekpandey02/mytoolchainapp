@@ -29,3 +29,4 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
 
+    
